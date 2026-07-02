@@ -34,3 +34,6 @@ EMBEDDING_MODEL = "BAAI/bge-large-en-v1.5"
 RERANK_MODEL = "cross-encoder/ms-marco-MiniLM-L-6-v2"
 
 TOP_K = 1000
+EMBEDDING_DIM = 1024
+
+BATCH_SIZE = 64
