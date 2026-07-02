@@ -1,19 +1,16 @@
-# Python
-__pycache__/
-*.pyc
 .venv/
 
-# IDE
+__pycache__/
+
+*.pyc
+
+models/*.npy
+models/*.index
+
+output/submission.csv
+
+data/candidates.jsonl
+
 .idea/
+
 .vscode/
-
-# Models
-models/
-*.npy
-*.index
-
-# Outputs
-output/
-
-# Dataset
-data/
