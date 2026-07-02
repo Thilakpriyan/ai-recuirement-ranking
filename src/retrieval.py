@@ -1,35 +1,26 @@
-import faiss
 import numpy as np
 
 from src.models.embedding_model import EmbeddingModel
-from src.config import (
-    FAISS_INDEX,
-    ID_FILE
-)
+from src.utils import build_candidate_text
 
 
 class CandidateRetriever:
 
     def __init__(self):
 
-        print("Loading FAISS Index...")
-
-        self.index = faiss.read_index(
-            str(FAISS_INDEX)
-        )
-
-        self.ids = np.load(
-            ID_FILE,
-            allow_pickle=True
-        )
+        print("Loading Embedding Model...")
 
         self.model = EmbeddingModel()
 
     def search(
             self,
+            index,
+            df,
             job_description,
-            top_k=500
+            top_k=200
     ):
+
+        print("Encoding Job Description...")
 
         query_embedding = self.model.encode(
             [job_description]
@@ -37,10 +28,12 @@ class CandidateRetriever:
 
         query_embedding = np.asarray(
             query_embedding,
-            dtype="float32"
+            dtype=np.float32
         )
 
-        scores, indices = self.index.search(
+        print("Searching FAISS Index...")
+
+        scores, indices = index.search(
             query_embedding,
             top_k
         )
@@ -52,14 +45,30 @@ class CandidateRetriever:
                 indices[0]
         ):
 
+            if idx == -1:
+                continue
+
+            candidate = df.iloc[idx].to_dict()
+
             results.append({
 
                 "candidate_id":
-                    self.ids[idx],
+                    candidate["candidate_id"],
 
                 "semantic_score":
-                    float(score)
+                    float(score),
+
+                "row_index":
+                    int(idx),
+
+                "candidate_text":
+                    build_candidate_text(candidate),
+
+                "candidate_data":
+                    candidate
 
             })
+
+        print(f"Retrieved {len(results)} candidates")
 
         return results

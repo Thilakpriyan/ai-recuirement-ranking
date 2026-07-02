@@ -1,4 +1,25 @@
 from typing import Dict
+import numpy as np
+
+
+def normalize(values):
+    values = np.array(values, dtype=float)
+
+    min_v = values.min()
+    max_v = values.max()
+
+    if max_v == min_v:
+        return np.ones_like(values)
+
+    return (values - min_v) / (max_v - min_v)
+
+
+def weighted_score(recruiter, semantic, cross):
+    return (
+        0.25 * recruiter +
+        0.35 * semantic +
+        0.40 * cross
+    )
 
 
 def build_candidate_text(candidate: Dict) -> str:
@@ -8,13 +29,9 @@ def build_candidate_text(candidate: Dict) -> str:
     """
 
     profile = candidate["profile"]
-
     skills = candidate["skills"]
-
     history = candidate["career_history"]
-
     education = candidate["education"]
-
     signals = candidate["redrob_signals"]
 
     skill_text = ", ".join(
@@ -56,9 +73,9 @@ Skills:
 {skill_text}
 
 Behavior:
-Profile Score {signals['profile_completeness_score']}
+Profile Score: {signals['profile_completeness_score']}
 
-Github Activity {signals['github_activity_score']}
+Github Activity: {signals['github_activity_score']}
 
-Open To Work {signals['open_to_work_flag']}
+Open To Work: {signals['open_to_work_flag']}
 """

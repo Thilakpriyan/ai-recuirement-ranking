@@ -98,7 +98,9 @@ class RankingService:
 
         df["recruiter_score"] = scores
 
-        return df.sort_values(
+        df = df.sort_values(
             "recruiter_score",
             ascending=False
         )
+
+        return df.head(3000)

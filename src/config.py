@@ -29,11 +29,12 @@ FAISS_INDEX = MODEL_DIR / "candidate.index"
 # Model Names
 # ==========================
 
-EMBEDDING_MODEL = "BAAI/bge-large-en-v1.5"
+EMBEDDING_MODEL = "sentence-transformers/all-MiniLM-L6-v2"
+EMBEDDING_DIM = 384
 
 RERANK_MODEL = "cross-encoder/ms-marco-MiniLM-L-6-v2"
 
 TOP_K = 1000
-EMBEDDING_DIM = 1024
+INDEX_SIZE = 10000
 
 BATCH_SIZE = 64
